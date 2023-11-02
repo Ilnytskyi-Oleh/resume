@@ -44,6 +44,13 @@ const fireAxios = async (e: MouseEvent) => {
   //     })
 };
 
+const getEmployees = (e: MouseEvent) => {
+  e.preventDefault();
+  axios.get('http://24.199.125.197/api/v1/employees/').then((res) => {
+    console.log(res);
+  });
+};
+
 const Hero = () => {
   const intl = useIntl();
   const title = intl.formatMessage({ id: 'title' });
@@ -82,6 +89,9 @@ const Hero = () => {
             </Link>
           }
         />
+        <Link href="#" onClick={getEmployees}>
+          <Button xl>Get Employees</Button>
+        </Link>
       </Section>
     </Background>
   );
