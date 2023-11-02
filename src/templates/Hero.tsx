@@ -46,7 +46,7 @@ const fireAxios = async (e: MouseEvent) => {
 
 const getEmployees = (e: MouseEvent) => {
   e.preventDefault();
-  axios.get('http://24.199.125.197/api/v1/employees/').then((res) => {
+  axios.get('https://24.199.125.197/api/v1/employees/').then((res) => {
     console.log(res);
   });
 };
