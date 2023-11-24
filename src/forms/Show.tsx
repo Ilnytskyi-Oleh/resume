@@ -35,7 +35,7 @@ export const Show = ({ setCurrent = () => {} }: Props) => {
     setStatus({ isLoading: true });
 
     try {
-      const res = await axios.get(`employees/${employeeId}`);
+      const res = await axios.get(`employees/${employeeId || 55}`);
       setCurrent(res.data.data);
     } catch (error: any) {
       alert(error.status);
