@@ -23,8 +23,6 @@ const messages = {
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const { locale } = useRouter();
   axios.defaults.headers.common.locale = locale || 'en';
-  axios.defaults.headers.common.Accept = 'application/json';
-  axios.defaults.headers.common['Content-Type'] = 'application/json';
   axios.defaults.baseURL = baseURL;
 
   return (
