@@ -30,27 +30,21 @@ export const Show = ({ setCurrent = () => {} }: Props) => {
   });
 
   const [employeeId, setEmployeeId] = useState<string>('');
-  const getEmployee = (e: FormEvent<HTMLFormElement>) => {
+  const getEmployee = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus({ isLoading: true });
 
-    axios
-      .get(`employees/${employeeId}`)
-      .then((res) => {
-        setCurrent(res.data.data);
-      })
-      .catch((res) => {
-        if (!res.response) {
-          setStatus({ isLoading: false, error: messages.general_error });
-
-          return;
-        }
-
-        setStatus({ isLoading: false, error: messages.no_employee });
-      })
-      .finally(() => {
-        setStatus({ isLoading: false });
-      });
+    try {
+      const res = await axios.get(`employees/${employeeId}`);
+      setCurrent(res.data.data);
+    } catch (error: any) {
+      alert(error.status);
+      if (!error.response) {
+        setStatus({ isLoading: false, error: messages.general_error });
+        return;
+      }
+      setStatus({ isLoading: false, error: messages.no_employee });
+    }
   };
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
