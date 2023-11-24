@@ -1,6 +1,5 @@
 import 'react-json-pretty/themes/monikai.css';
 
-import axios from 'axios';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -30,22 +29,53 @@ export const Show = ({ setCurrent = () => {} }: Props) => {
   });
 
   const [employeeId, setEmployeeId] = useState<string>('');
+  // const getEmployee = async (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   setStatus({ isLoading: true });
+  //
+  //   if (!employeeId.trim()) {
+  //     setStatus({ isLoading: false, error: 'Add ID' });
+  //
+  //     return;
+  //   }
+  //
+  //   try {
+  //     const res = await axios.get(`employees/${employeeId}`);
+  //     alert(JSON.stringify(res, null, 2));
+  //     setCurrent(res.data.data);
+  //   } catch (error: any) {
+  //     alert(JSON.stringify(error, null, 2));
+  //     if (!error.response) {
+  //       setStatus({ isLoading: false, error: messages.general_error });
+  //       return;
+  //     }
+  //     setStatus({ isLoading: false, error: messages.no_employee });
+  //   }
+  // };
+
   const getEmployee = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus({ isLoading: true });
 
     if (!employeeId.trim()) {
       setStatus({ isLoading: false, error: 'Add ID' });
-
       return;
     }
 
     try {
-      const res = await axios.get(`employees/${employeeId}`);
-      alert(JSON.stringify(res, null, 2));
-      setCurrent(res.data.data);
+      const response = await fetch(
+        `https://24.199.125.197/api/v1/employees/${employeeId}`,
+      );
+
+      if (!response.ok) {
+        setStatus({ isLoading: false, error: messages.general_error });
+        return;
+      }
+
+      const data = await response.json();
+      console.log(data);
+      setCurrent(data.data);
     } catch (error: any) {
-      alert(JSON.stringify(error, null, 2));
       if (!error.response) {
         setStatus({ isLoading: false, error: messages.general_error });
         return;
@@ -53,7 +83,6 @@ export const Show = ({ setCurrent = () => {} }: Props) => {
       setStatus({ isLoading: false, error: messages.no_employee });
     }
   };
-
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     const inputText = e.target.value;
     const onlyNumbers = inputText.replace(/[A-Za-zА-Яа-я]+/g, '');
