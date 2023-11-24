@@ -355,12 +355,14 @@ export const Update = ({
             {messages.find_again}
           </button>
 
-          <button
-            type="submit"
-            className="inline-block rounded-md bg-primary-500 px-2 text-center text-base font-semibold text-white hover:bg-primary-600 lg:ml-auto"
-          >
-            {messages.form_btn_update}
-          </button>
+          {!isTheSameObj(currentEmployee, editedEmployee) && (
+            <button
+              type="submit"
+              className="inline-block rounded-md bg-primary-500 px-2 text-center text-base font-semibold text-white hover:bg-primary-600 lg:ml-auto"
+            >
+              {messages.form_btn_update}
+            </button>
+          )}
         </div>
 
         {/* Loader */}
