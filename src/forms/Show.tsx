@@ -30,7 +30,7 @@ export const Show = ({ setCurrent = () => {} }: Props) => {
   });
 
   const [employeeId, setEmployeeId] = useState<string>('');
-  const getEmployee = async (e: FormEvent<HTMLFormElement>) => {
+  const getEmployee = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus({ isLoading: true });
 
@@ -45,6 +45,7 @@ export const Show = ({ setCurrent = () => {} }: Props) => {
 
           return;
         }
+
         setStatus({ isLoading: false, error: messages.no_employee });
       })
       .finally(() => {
