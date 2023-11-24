@@ -34,17 +34,22 @@ export const Show = ({ setCurrent = () => {} }: Props) => {
     e.preventDefault();
     setStatus({ isLoading: true });
 
-    try {
-      const res = await axios.get(`employees/${employeeId}`);
-      setCurrent(res.data.data);
-    } catch (error: any) {
-      alert(error.code);
-      if (!error.response) {
-        setStatus({ isLoading: false, error: messages.general_error });
-        return;
-      }
-      setStatus({ isLoading: false, error: messages.no_employee });
-    }
+    axios
+      .get(`employees/${employeeId}`)
+      .then((res) => {
+        setCurrent(res.data.data);
+      })
+      .catch((res) => {
+        if (!res.response) {
+          setStatus({ isLoading: false, error: messages.general_error });
+
+          return;
+        }
+        setStatus({ isLoading: false, error: messages.no_employee });
+      })
+      .finally(() => {
+        setStatus({ isLoading: false });
+      });
   };
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {

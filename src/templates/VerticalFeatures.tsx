@@ -225,7 +225,7 @@ const VerticalFeatures = () => {
                 <Link href="https://vercel.com/docs/">Vercel</Link>
               </li>
               <li>
-                <Link href="https://nextjs.org//">Next.js</Link>
+                <Link href="https://nextjs.org/">Next.js</Link>
               </li>
               <li>
                 <Link href="https://formatjs.io/docs/getting-started/installation/">
