@@ -42,9 +42,10 @@ export const Show = ({ setCurrent = () => {} }: Props) => {
 
     try {
       const res = await axios.get(`employees/${employeeId}`);
+      alert(res);
       setCurrent(res.data.data);
     } catch (error: any) {
-      alert(error.status);
+      alert(error);
       if (!error.response) {
         setStatus({ isLoading: false, error: messages.general_error });
         return;
