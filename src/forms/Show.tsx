@@ -34,8 +34,14 @@ export const Show = ({ setCurrent = () => {} }: Props) => {
     e.preventDefault();
     setStatus({ isLoading: true });
 
+    if (!employeeId.trim()) {
+      setStatus({ isLoading: false, error: 'Add ID' });
+
+      return;
+    }
+
     try {
-      const res = await axios.get(`employees/${employeeId || 55}`);
+      const res = await axios.get(`employees/${employeeId}`);
       setCurrent(res.data.data);
     } catch (error: any) {
       alert(error.status);
