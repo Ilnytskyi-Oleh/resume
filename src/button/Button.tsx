@@ -1,8 +1,9 @@
 import className from 'classnames';
+import type { ReactNode } from 'react';
 
 type IButtonProps = {
   xl?: boolean;
-  children: string;
+  children: string | ReactNode;
 };
 
 const Button = (props: IButtonProps) => {

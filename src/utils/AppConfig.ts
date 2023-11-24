@@ -1,6 +1,6 @@
 export const AppConfig = {
   site_name: 'Ilnytskyi',
-  title: 'CV - Ilnytskyi',
+  title: 'Ilnytskyi',
   description: '',
   locale: 'en',
 };
