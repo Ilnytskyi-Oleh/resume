@@ -64,30 +64,30 @@ const VerticalFeatures = () => {
 
                 <div className="text-base">
                   <span>{messages.form_development}</span>
-                  <div>
+                  <div className="flex flex-wrap gap-x-1">
                     <Link
                       className="text-indigo-500 hover:underline"
                       href="https://cib.com.ua"
                       target="_blank"
                     >
-                      {messages.form_bank_site},
+                      <div className="">{messages.form_bank_site},</div>
                     </Link>
                     <Link
-                      className="ml-1 text-indigo-500 hover:underline"
+                      className="text-indigo-500 hover:underline"
                       href="https://cib.com.ua"
                       target="_blank"
                     >
                       Prodajka,
                     </Link>
                     <Link
-                      className="ml-1 text-indigo-500 hover:underline"
+                      className="text-indigo-500 hover:underline"
                       href="https://cib.com.ua"
                       target="_blank"
                     >
                       UkrPayments,
                     </Link>
                     <Link
-                      className="ml-1 text-indigo-500 hover:underline"
+                      className="text-indigo-500 hover:underline"
                       href="https://app.swaggerhub.com/apis-docs/UKRPAYMENTSCOM_1/ukr-payments_api_ecom/1"
                       target="_blank"
                     >
@@ -205,7 +205,10 @@ const VerticalFeatures = () => {
         description={
           <>
             <ul className="ml-6 list-disc text-left text-base text-primary-500">
-              <li className="">
+              <li>
+                <Link href="https://www.cloudflare.com/">Cloudflare</Link>
+              </li>
+              <li>
                 <Link href="https://www.digitalocean.com/">DigitalOcean</Link>
               </li>
               <li>
