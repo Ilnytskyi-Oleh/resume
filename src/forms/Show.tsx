@@ -8,6 +8,7 @@ import { useIntl } from 'react-intl';
 import { Loader } from '@/loader/Loader';
 import TextField from '@/textfield/TextField';
 import type { Employee } from '@/types/EmployeeType';
+import { getOnlyNumbers } from '@/utils/formatter';
 
 type Props = {
   setCurrent: (employee: Employee) => void;
@@ -54,9 +55,7 @@ export const Show = ({ setCurrent = () => {} }: Props) => {
   };
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
-    const inputText = e.target.value;
-    const onlyNumbers = inputText.replace(/[A-Za-zА-Яа-я]+/g, '');
-    setEmployeeId(onlyNumbers);
+    setEmployeeId(getOnlyNumbers(e.target.value));
   };
 
   return (

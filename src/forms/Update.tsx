@@ -12,6 +12,10 @@ import { Loader } from '@/loader/Loader';
 import TextField from '@/textfield/TextField';
 import type { Employee } from '@/types/EmployeeType';
 import type { ErrorsType } from '@/types/ErrorsType';
+import {
+  getOnlyLettersAndSingleSpace,
+  getOnlyNumbers,
+} from '@/utils/formatter';
 
 const MySwal = withReactContent(Swal);
 
@@ -96,54 +100,36 @@ export const Update = ({
   // <editor-fold desc="Handlers">
   const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     setEditedEmployee((prevState) => {
-      const inputText = e.target.value;
-
-      const onlyLettersAndSingleSpace = inputText
-        .replace(/[^.A-Za-zА-Яа-я ]+/g, '')
-        .replace('  ', ' ');
-
       return {
         ...prevState,
-        name: onlyLettersAndSingleSpace,
+        name: getOnlyLettersAndSingleSpace(e.target.value),
       };
     });
   };
 
   const handleChangeAge = (e: ChangeEvent<HTMLInputElement>) => {
     setEditedEmployee((prevState) => {
-      const inputText = e.target.value;
-
-      const onlyNumbers = inputText.replace(/[A-Za-zА-Яа-я]+/g, '');
-
       return {
         ...prevState,
-        age: +onlyNumbers,
+        age: +getOnlyNumbers(e.target.value),
       };
     });
   };
 
   const handleChangeSalary = (e: ChangeEvent<HTMLInputElement>) => {
     setEditedEmployee((prevState) => {
-      const inputText = e.target.value;
-
-      const onlyNumbers = inputText.replace(/[A-Za-zА-Яа-я]+/g, '');
-
       return {
         ...prevState,
-        salary: +onlyNumbers,
+        salary: +getOnlyNumbers(e.target.value),
       };
     });
   };
 
   const handleChangeExperience = (e: ChangeEvent<HTMLInputElement>) => {
     setEditedEmployee((prevState) => {
-      const inputText = e.target.value;
-
-      const onlyNumbers = inputText.replace(/[A-Za-zА-Яа-я]+/g, '');
-
       return {
         ...prevState,
-        experience: +onlyNumbers,
+        experience: +getOnlyNumbers(e.target.value),
       };
     });
   };
@@ -157,7 +143,60 @@ export const Update = ({
     });
   };
 
-  const handleDeleteEmployee = (
+  const updateEmployee = () => {
+    axios
+      .patch(`/employees/${editedEmployee.id}`, editedEmployee)
+      .then((res) => {
+        setCurrent(res.data.data);
+        setIsEdited(true);
+      })
+      .catch((err) => {
+        if (!err.response) {
+          setErrors((prev) => {
+            return {
+              ...prev,
+              general: messages.went_wrong,
+            };
+          });
+
+          return;
+        }
+
+        setErrors((prev) => {
+          return {
+            ...prev,
+            ...err.response.data.errors,
+          };
+        });
+      })
+      .finally(() => {
+        setEditedEmployee(currentEmployee);
+        setIsShowJson(true);
+        setIsLoading(false);
+      });
+  };
+
+  const deleteEmployee = () => {
+    axios
+      .delete(`/employees/${editedEmployee.id}`)
+      .then((res) => {
+        setDeletedEmployee(res.data);
+      })
+      .catch(() => {
+        setErrors((prev) => {
+          return {
+            ...prev,
+            general: messages.cant_delete,
+          };
+        });
+      })
+      .finally(() => {
+        setEditedEmployee(currentEmployee);
+        setIsShowJson(true);
+        setIsLoading(false);
+      });
+  };
+  const handleDeleteButton = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
@@ -168,29 +207,12 @@ export const Update = ({
     }).then((result) => {
       if (result.isConfirmed) {
         setIsLoading(true);
-        axios
-          .delete(`/employees/${editedEmployee.id}`)
-          .then((res) => {
-            setDeletedEmployee(res.data);
-          })
-          .catch(() => {
-            setErrors((prev) => {
-              return {
-                ...prev,
-                general: messages.cant_delete,
-              };
-            });
-          })
-          .finally(() => {
-            setEditedEmployee(currentEmployee);
-            setIsShowJson(true);
-            setIsLoading(false);
-          });
+        deleteEmployee();
       }
     });
   };
 
-  const handleUpdateEmployee = (e: FormEvent<HTMLFormElement>) => {
+  const handleUpdateButton = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     MySwal.fire({
       title: messages.confirm_update,
@@ -202,36 +224,7 @@ export const Update = ({
         setIsLoading(true);
         setIsEdited(false);
 
-        axios
-          .patch(`/employees/${editedEmployee.id}`, editedEmployee)
-          .then((res) => {
-            setCurrent(res.data.data);
-            setIsEdited(true);
-          })
-          .catch((err) => {
-            if (!err.response) {
-              setErrors((prev) => {
-                return {
-                  ...prev,
-                  general: messages.went_wrong,
-                };
-              });
-
-              return;
-            }
-
-            setErrors((prev) => {
-              return {
-                ...prev,
-                ...err.response.data.errors,
-              };
-            });
-          })
-          .finally(() => {
-            setEditedEmployee(currentEmployee);
-            setIsShowJson(true);
-            setIsLoading(false);
-          });
+        updateEmployee();
       }
     });
   };
@@ -259,7 +252,7 @@ export const Update = ({
   return (
     <>
       <form
-        onSubmit={handleUpdateEmployee}
+        onSubmit={handleUpdateButton}
         onReset={resetForm}
         action=""
         className="relative"
@@ -339,7 +332,7 @@ export const Update = ({
 
           <button
             type="button"
-            onClick={handleDeleteEmployee}
+            onClick={handleDeleteButton}
             className="inline-block rounded-md bg-amber-700 px-2 text-center text-base font-semibold text-white first-letter:uppercase hover:bg-amber-900"
           >
             {messages.delete_btn}

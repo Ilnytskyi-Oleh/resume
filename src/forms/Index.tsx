@@ -9,6 +9,10 @@ import JSONPretty from 'react-json-pretty';
 import { Loader } from '@/loader/Loader';
 import TextField from '@/textfield/TextField';
 import type { FilterParamsType } from '@/types/FilterParamsType';
+import {
+  getOnlyLettersAndSingleSpace,
+  getOnlyNumbers,
+} from '@/utils/formatter';
 
 const initFilterParams: FilterParamsType = {
   name: '',
@@ -122,15 +126,9 @@ export const Index = () => {
 
   const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     setFilterParams((prevState) => {
-      const inputText = e.target.value;
-
-      const onlyLettersAndSingleSpace = inputText
-        .replace(/[^.A-Za-zА-Яа-я ]+/g, '')
-        .replace('  ', ' ');
-
       return {
         ...prevState,
-        name: onlyLettersAndSingleSpace,
+        name: getOnlyLettersAndSingleSpace(e.target.value),
       };
     });
   };
@@ -171,25 +169,19 @@ export const Index = () => {
   };
 
   const handleChangePerPage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputText = e.target.value;
-    const onlyNumbers = inputText.replace(/[A-Za-zА-Яа-я]+/g, '');
-
     setFilterParams((prevState) => {
       return {
         ...prevState,
-        perPage: +onlyNumbers,
+        perPage: +getOnlyNumbers(e.target.value),
       };
     });
   };
 
   const handleChangePage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputText = e.target.value;
-    const onlyNumbers = inputText.replace(/[A-Za-zА-Яа-я]+/g, '');
-
     setFilterParams((prevState) => {
       return {
         ...prevState,
-        page: +onlyNumbers,
+        page: +getOnlyNumbers(e.target.value),
       };
     });
   };
@@ -233,7 +225,7 @@ export const Index = () => {
         <div>
           <div className="flex items-center">
             <div className="text-base">{messages.form_input_age}:</div>
-            <div className="ml-auto flex w-9/12 items-center">
+            <div className="ml-auto flex w-8/12 items-center">
               <div className="">
                 <input
                   name="age[min]"
@@ -257,7 +249,7 @@ export const Index = () => {
               </div>
             </div>
           </div>
-          <div className="relative bottom-2 ml-3 h-5 text-left text-sm font-light  text-amber-700">
+          <div className="relative bottom-2 ml-3 h-5 text-left text-sm font-light text-amber-700">
             {errors.age[0] || ''}
           </div>
         </div>
@@ -265,7 +257,7 @@ export const Index = () => {
         <div>
           <div className="flex items-center">
             <div className="mr-1 text-base">{messages.form_input_salary}:</div>
-            <div className="ml-auto flex w-9/12 items-center">
+            <div className="ml-auto flex w-8/12 items-center">
               <div>
                 <input
                   name="salary[min]"
@@ -289,13 +281,13 @@ export const Index = () => {
               </div>
             </div>
           </div>
-          <div className="relative bottom-2 ml-3 h-5 text-left text-sm font-light  text-amber-700">
+          <div className="relative bottom-2 ml-3 h-5 text-left text-sm font-light text-amber-700">
             {errors.salary[0] || ''}
           </div>
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="grow text-left text-base">{messages.per_page}:</div>
+          <div className="w-1/2 text-left text-base">{messages.per_page}:</div>
           <div>
             <input
               name="perPage"
@@ -307,12 +299,12 @@ export const Index = () => {
             />
           </div>
         </div>
-        <div className="relative bottom-2 ml-3 h-5 text-left text-sm font-light  text-amber-700">
+        <div className="relative bottom-2 ml-3 h-5 text-left text-sm font-light text-amber-700">
           {errors.perPage[0] || ''}
         </div>
 
         <div className="flex items-center ">
-          <div className="grow text-left text-base">
+          <div className="w-1/2 text-left text-base">
             {messages.current_page}:
           </div>
           <div>
@@ -322,7 +314,7 @@ export const Index = () => {
               value={filterParams.page}
               onChange={handleChangePage}
               placeholder={messages.current_page}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              className=" mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             />
           </div>
         </div>

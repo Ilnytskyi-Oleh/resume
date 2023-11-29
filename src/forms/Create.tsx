@@ -9,6 +9,10 @@ import JSONPretty from 'react-json-pretty';
 import { Loader } from '@/loader/Loader';
 import TextField from '@/textfield/TextField';
 import type { Employee } from '@/types/EmployeeType';
+import {
+  getOnlyLettersAndSingleSpace,
+  getOnlyNumbers,
+} from '@/utils/formatter';
 
 type Props = {
   setCurrent?: (employee: Employee) => void;
@@ -59,15 +63,9 @@ export const Create = ({ setCurrent = () => {} }: Props) => {
   // <editor-fold desc="Handlers">
   const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     setNewEmployee((prevState) => {
-      const inputText = e.target.value;
-
-      const onlyLettersAndSingleSpace = inputText
-        .replace(/[^A-Za-zА-Яа-я ]+/g, '')
-        .replace('  ', ' ');
-
       return {
         ...prevState,
-        name: onlyLettersAndSingleSpace,
+        name: getOnlyLettersAndSingleSpace(e.target.value),
       };
     });
   };
@@ -78,39 +76,27 @@ export const Create = ({ setCurrent = () => {} }: Props) => {
   };
   const handleChangeAge = (e: ChangeEvent<HTMLInputElement>) => {
     setNewEmployee((prevState) => {
-      const inputText = e.target.value;
-
-      const onlyNumbers = inputText.replace(/[A-Za-zА-Яа-я]+/g, '');
-
       return {
         ...prevState,
-        age: +onlyNumbers,
+        age: +getOnlyNumbers(e.target.value),
       };
     });
   };
 
   const handleChangeSalary = (e: ChangeEvent<HTMLInputElement>) => {
     setNewEmployee((prevState) => {
-      const inputText = e.target.value;
-
-      const onlyNumbers = inputText.replace(/[A-Za-zА-Яа-я]+/g, '');
-
       return {
         ...prevState,
-        salary: +onlyNumbers,
+        salary: +getOnlyNumbers(e.target.value),
       };
     });
   };
 
   const handleChangeExperience = (e: ChangeEvent<HTMLInputElement>) => {
     setNewEmployee((prevState) => {
-      const inputText = e.target.value;
-
-      const onlyNumbers = inputText.replace(/[A-Za-zА-Яа-я]+/g, '');
-
       return {
         ...prevState,
-        experience: +onlyNumbers,
+        experience: +getOnlyNumbers(e.target.value),
       };
     });
   };
